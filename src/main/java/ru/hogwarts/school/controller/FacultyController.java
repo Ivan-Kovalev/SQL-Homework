@@ -12,7 +12,7 @@ import java.util.List;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
-@RequestMapping(path = "faculties")
+@RequestMapping(path = "/faculties")
 public class FacultyController {
 
     private final FacultyService service;
