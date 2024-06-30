@@ -28,33 +28,40 @@ public class AvatarController {
 
     @PostMapping(value = "/{id}/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> uploadAvatar(@PathVariable Long id, @RequestParam MultipartFile avatar) throws IOException {
-        if (avatar.getSize() >= 1024 * 300) {
-            return ResponseEntity.badRequest().body("File is to big");
+        try {
+            service.uploadAvatar(id, avatar);
+            return ResponseEntity.ok().build();
+        } catch (IOException exception) {
+            return new ResponseEntity<>("Ошибка при загрузке файла", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        service.uploadAvatar(id, avatar);
-        return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/{id}/avatar/preview")
     public ResponseEntity<byte[]> downloadAvatar(@PathVariable Long id) {
         Avatar avatar = service.findAvatar(id);
+        if (avatar != null) {
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.parseMediaType(avatar.getMediaType()));
-        headers.setContentLength(avatar.getPreview().length);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType(avatar.getMediaType()));
+            headers.setContentLength(avatar.getPreview().length);
 
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(avatar.getPreview());
+            return ResponseEntity.status(HttpStatus.OK).headers(headers).body(avatar.getPreview());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @GetMapping(value = "/{id}/avatar")
     public void downloadAvatar(@PathVariable Long id, HttpServletResponse response) throws IOException {
         Avatar avatar = service.findAvatar(id);
-
+        if (avatar == null) {
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
         Path path = Path.of(avatar.getFilePath());
 
         try (InputStream is = Files.newInputStream(path);
              OutputStream os = response.getOutputStream()) {
-            response.setStatus(200);
+            response.setStatus(HttpServletResponse.SC_OK);
             response.setContentType(avatar.getMediaType());
             response.setContentLength(Math.toIntExact(avatar.getFileSize()));
 

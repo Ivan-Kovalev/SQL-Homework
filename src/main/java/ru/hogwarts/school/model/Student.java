@@ -24,7 +24,7 @@ public class Student {
     @JoinColumn(name = "faculty_id")
     private Faculty faculty;
 
-    @OneToOne
+    @OneToOne(mappedBy = "student")
     private Avatar avatar;
 
 }

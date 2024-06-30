@@ -50,10 +50,9 @@ public class AvatarService {
         }
 
         Avatar avatar = findAvatar(id);
-        avatar.setStudent(student);
-        avatar.setFilePath(filePath.toString());
-        avatar.setFileSize(file.getSize());
-        avatar.setMediaType(file.getContentType());
+        if (avatar == null) {
+            avatar = createAvatar(student, filePath, file);
+        }
         avatar.setPreview(generateImagePreview(filePath));
 
         avatarRepository.save(avatar);
@@ -79,10 +78,20 @@ public class AvatarService {
     }
 
     public Avatar findAvatar(Long id) {
-        return avatarRepository.findAvatarById(id).orElse(new Avatar());
+        return avatarRepository.findAvatarById(id).orElse(null);
     }
 
     private String getExtension(String fileName) {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
+    }
+
+    private Avatar createAvatar(Student  student, Path filePath, MultipartFile file, ) {
+        Avatar avatar = new Avatar();
+        avatar.setStudent(student);
+        avatar.setFilePath(filePath.toString());
+        avatar.setFileSize(file.getSize());
+        avatar.setMediaType(file.getContentType());
+
+        return avatar;
     }
 }
