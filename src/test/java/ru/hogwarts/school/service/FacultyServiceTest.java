@@ -17,17 +17,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static ru.hogwarts.school.test_utils.ConstantFaculty.FACULTIES;
+import static ru.hogwarts.school.test_utils.ConstantFaculty.GRYFFINDOR;
+import static ru.hogwarts.school.test_utils.ConstantStudent.*;
 
 @ExtendWith(MockitoExtension.class)
 class FacultyServiceTest {
-
-    private final Faculty faculty = new Faculty(1L, "Gryffindor", "red");
-    private final List<Faculty> faculties = List.of(
-            new Faculty(1L, "Gryffindor", "red"),
-            new Faculty(2L, "Slytherin", "green"),
-            new Faculty(3L, "GryffindorCopy", "red"),
-            new Faculty(4L, "SlytherinCopy", "green"),
-            new Faculty(5L, "SlytherinCopy2", null));
 
     @Mock
     private FacultyRepository facultyRepository;
@@ -37,29 +32,30 @@ class FacultyServiceTest {
 
     @Test
     void add() {
-        Mockito.when(facultyRepository.save(any())).thenReturn(faculty);
+        Mockito.when(facultyRepository.save(any())).thenReturn(GRYFFINDOR);
 
-        Assertions.assertEquals(faculty, service.add(new Faculty(1L, "Gryffindor", "red")));
+        Assertions.assertEquals(GRYFFINDOR, service.add(GRYFFINDOR));
     }
 
     @Test
     void find() {
-        Mockito.when(facultyRepository.findById(1L)).thenReturn(Optional.of(faculty));
+        Mockito.when(facultyRepository.findById(1L)).thenReturn(Optional.of(GRYFFINDOR));
 
-        Assertions.assertEquals(faculty, service.find(1L));
+        Assertions.assertEquals(GRYFFINDOR, service.find(1L));
     }
 
     @Test
     void edit() {
-        Mockito.when(facultyRepository.save(new Faculty(1L, "Gryffindor", "red"))).thenReturn(faculty);
+        Mockito.when(facultyRepository.save(new Faculty(1L, "Gryffindor", "red",
+                List.of(STUDENT_1, STUDENT_2, STUDENT_3, STUDENT_4)))).thenReturn(GRYFFINDOR);
 
-        Assertions.assertEquals(faculty, service.edit(new Faculty(1L, "Gryffindor", "red")));
+        Assertions.assertEquals(GRYFFINDOR, service.edit(new Faculty(1L, "Gryffindor", "red",
+                List.of(STUDENT_1, STUDENT_2, STUDENT_3, STUDENT_4))));
     }
 
     @Test
     void delete() {
-        faculty.setId(1L);
-        when(facultyRepository.findById(1L)).thenReturn(Optional.of(faculty));
+        when(facultyRepository.findById(1L)).thenReturn(Optional.of(GRYFFINDOR));
 
         assertTrue(service.delete(1L));
         verify(facultyRepository).deleteById(1L);
@@ -67,16 +63,16 @@ class FacultyServiceTest {
 
     @Test
     void getAllFaculty() {
-        Mockito.when(facultyRepository.findAll()).thenReturn(faculties);
+        Mockito.when(facultyRepository.findAll()).thenReturn(FACULTIES);
 
-        Assertions.assertEquals(faculties, service.getAllFaculty());
-        Assertions.assertEquals(5, service.getAllFaculty().size());
+        Assertions.assertEquals((FACULTIES), service.getAllFaculty());
+        Assertions.assertEquals(2, service.getAllFaculty().size());
     }
 
     @Test
     void getAllFacultyByColor() {
-        Mockito.when(facultyRepository.findFacultyByColor(any())).thenReturn(faculties);
+        Mockito.when(facultyRepository.findFacultiesByColor(any())).thenReturn(FACULTIES);
 
-        Assertions.assertEquals(faculties, service.getAllFacultyByColor("red"));
+        Assertions.assertEquals(FACULTIES, service.getAllFacultyByColor("red"));
     }
 }

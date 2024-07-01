@@ -1,7 +1,6 @@
 package ru.hogwarts.school.service;
 
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -85,7 +84,7 @@ public class AvatarService {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 
-    private Avatar createAvatar(Student  student, Path filePath, MultipartFile file, ) {
+    private Avatar createAvatar(Student student, Path filePath, MultipartFile file) {
         Avatar avatar = new Avatar();
         avatar.setStudent(student);
         avatar.setFilePath(filePath.toString());

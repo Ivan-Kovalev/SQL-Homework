@@ -9,23 +9,19 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static ru.hogwarts.school.test_utils.ConstantFaculty.GRYFFINDOR;
+import static ru.hogwarts.school.test_utils.ConstantStudent.STUDENTS;
+import static ru.hogwarts.school.test_utils.ConstantStudent.STUDENT_1;
+import static ru.hogwarts.school.test_utils.ConstantsAvatar.AVATAR_1;
 
 @ExtendWith(MockitoExtension.class)
 class StudentServiceTest {
-
-    private final Student student = new Student(1L, "Harry Potter", 16);
-    private final List<Student> students = List.of(
-            new Student(1L, "Harry Potter", 16),
-            new Student(2L, "Ron Weasley", 16),
-            new Student(3L, "Hermione Granger", 15),
-            new Student(4L, "Hermione Granger Error", null));
 
     @Mock
     private StudentRepository studentRepository;
@@ -35,29 +31,34 @@ class StudentServiceTest {
 
     @Test
     void add() {
-        when(studentRepository.save(any())).thenReturn(student);
+        when(studentRepository.save(any())).thenReturn(STUDENT_1);
 
-        Assertions.assertEquals(student, service.add(new Student(1L, "Harry Potter", 16)));
+        Assertions.assertEquals(
+                STUDENT_1,
+                service.add(new Student(1L, "Harry Potter", 16, GRYFFINDOR, AVATAR_1)));
     }
 
     @Test
     void find() {
-        when(studentRepository.findById(1L)).thenReturn(Optional.of(student));
+        when(studentRepository.findById(1L)).thenReturn(Optional.of(STUDENT_1));
 
-        Assertions.assertEquals(student, service.find(1L));
+        Assertions.assertEquals(STUDENT_1, service.find(1L));
     }
 
     @Test
     void edit() {
-        when(studentRepository.save(new Student(1L, "Harry Potter", 16))).thenReturn(student);
+        when(studentRepository.save(
+                new Student(1L, "Harry Potter", 16, GRYFFINDOR, AVATAR_1)))
+                .thenReturn(STUDENT_1);
 
-        Assertions.assertEquals(student, service.edit(new Student(1L, "Harry Potter", 16)));
+        Assertions.assertEquals(
+                STUDENT_1,
+                service.edit(new Student(1L, "Harry Potter", 16, GRYFFINDOR, AVATAR_1)));
     }
 
     @Test
     void delete() {
-        student.setId(1L);
-        when(studentRepository.findById(1L)).thenReturn(Optional.of(student));
+        when(studentRepository.findById(1L)).thenReturn(Optional.of(STUDENT_1));
 
         assertTrue(service.delete(1L));
         verify(studentRepository).deleteById(1L);
@@ -65,16 +66,16 @@ class StudentServiceTest {
 
     @Test
     void getAllStudents() {
-        when(studentRepository.findAll()).thenReturn(students);
+        when(studentRepository.findAll()).thenReturn(STUDENTS);
 
-        Assertions.assertEquals(students, service.getAllStudents());
+        Assertions.assertEquals(STUDENTS, service.getAllStudents());
         Assertions.assertEquals(4, service.getAllStudents().size());
     }
 
     @Test
     void getAllStudentsByAge() {
-        when(studentRepository.findStudentByAge(any())).thenReturn(students);
+        when(studentRepository.findStudentsByAge(any())).thenReturn(STUDENTS);
 
-        Assertions.assertEquals(students, service.getAllStudentsByAge(15));
+        Assertions.assertEquals(STUDENTS, service.getAllStudentsByAge(15));
     }
 }
