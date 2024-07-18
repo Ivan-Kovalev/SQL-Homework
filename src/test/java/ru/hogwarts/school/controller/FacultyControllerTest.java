@@ -61,7 +61,6 @@ class FacultyControllerTest {
         Faculty faculty = new Faculty();
         faculty.setName("Gryffindor");
         faculty.setColor("red");
-        faculty.setId(1L);
 
         ResponseEntity<Faculty> facultyResponseEntity = restTemplate.postForEntity("/faculties", faculty, Faculty.class);
 
