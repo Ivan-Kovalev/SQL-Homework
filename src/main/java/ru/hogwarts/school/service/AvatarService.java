@@ -84,7 +84,10 @@ public class AvatarService {
 
     public List<Avatar> getAllAvatar(Integer pageNumber, Integer pageSize) {
         PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
-        return avatarRepository.findAll(pageRequest).getContent();
+        if (pageNumber > 0) {
+            return avatarRepository.findAll(pageRequest).getContent();
+        }
+        throw new RuntimeException("Такой страницы не существует");
     }
 
     private String getExtension(String fileName) {

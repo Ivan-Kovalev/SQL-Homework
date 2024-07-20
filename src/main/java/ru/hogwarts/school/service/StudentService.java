@@ -17,7 +17,7 @@ public class StudentService {
     }
 
     public Student add(Student student) {
-        student.setId(0L);
+        student.setId(null);
         return studentRepository.save(student);
     }
 
@@ -61,6 +61,6 @@ public class StudentService {
     }
 
     public List<Student> getLastAddedFiveStudent() {
-        return studentRepository.getLastAddedFiveStudent();
+        return studentRepository.getLastAddedFiveStudents();
     }
 }
