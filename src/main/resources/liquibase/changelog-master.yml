@@ -1,3 +1,21 @@
-dataBaseChangeLog:
-  - include:
-      file: liquibase/scripts/course-four-lesson-three.sql
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: ikovalev
+      changes:
+        - createIndex:
+            tableName: student
+            indexName: student_name_index
+            columns:
+              - name
+
+        - changeSet:
+            id: 2
+            author: ikovalev
+            changes:
+              - createIndex:
+                  tableName: faculty
+                  indexName: faculty_name_color_index
+                  columns:
+                    - name
+                    - color
