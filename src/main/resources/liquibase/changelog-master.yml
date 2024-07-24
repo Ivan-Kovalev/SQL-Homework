@@ -7,15 +7,17 @@ databaseChangeLog:
             tableName: student
             indexName: student_name_index
             columns:
-              - name
-
-        - changeSet:
-            id: 2
-            author: ikovalev
-            changes:
-              - createIndex:
-                  tableName: faculty
-                  indexName: faculty_name_color_index
-                  columns:
-                    - name
-                    - color
+              - column:
+                  name: name
+  - changeSet:
+      id: 2
+      author: ikovalev
+      changes:
+        - createIndex:
+            tableName: faculty
+            indexName: faculty_name_color_index
+            columns:
+              - column:
+                  name: name
+              - column:
+                  name: color
