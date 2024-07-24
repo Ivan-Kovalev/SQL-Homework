@@ -44,6 +44,21 @@ public class StudentController {
         return service.getAllStudentsByAgeBetween(min, max);
     }
 
+    @GetMapping(path = "/count-all")
+    public Integer getCountAllStudent() {
+        return service.getCountAllStudent();
+    }
+
+    @GetMapping(path = "/average-age")
+    public Integer getAverageAgeStudents() {
+        return service.getAverageAgeStudents();
+    }
+
+    @GetMapping(path = "/last-five")
+    public Collection<Student> getLastAddedFiveStudent() {
+        return service.getLastAddedFiveStudent();
+    }
+
     @PostMapping
     public Student addStudent(@RequestBody Student student) {
         return service.add(student);
