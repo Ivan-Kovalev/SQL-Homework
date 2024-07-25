@@ -18,22 +18,22 @@ public class StudentService {
         this.studentRepository = studentRepository;
     }
 
-    Logger logger = LoggerFactory.getLogger(StudentService.class);
+    private final Logger logger = LoggerFactory.getLogger(StudentService.class);
 
     public Student add(Student student) {
         student.setId(null);
-        logger.info("Вызван метод add");
+        logger.debug("Вызван метод add");
         return studentRepository.save(student);
     }
 
     public Student find(Long id) {
-        logger.info("Вызван метод find");
+        logger.debug("Вызван метод find");
         return studentRepository.findById(id)
                 .orElse(null);
     }
 
     public Student edit(Student student) {
-        logger.info("Вызван метод edit");
+        logger.debug("Вызван метод edit");
         return studentRepository.save(student);
     }
 
@@ -41,41 +41,41 @@ public class StudentService {
         Optional<Student> studentOptional = studentRepository.findById(id);
         if (studentOptional.isPresent()) {
             studentRepository.deleteById(id);
-            logger.info("Вызван метод delete");
+            logger.debug("Вызван метод delete");
             return true;
         } else {
-            logger.debug("Метод delete не отработал");
+            logger.warn("Метод delete не отработал");
             return false;
         }
     }
 
     public List<Student> getAllStudents() {
-        logger.info("Вызван метод getAllStudents");
+        logger.debug("Вызван метод getAllStudents");
         return studentRepository.findAll();
     }
 
     public List<Student> getAllStudentsByAge(Integer age) {
-        logger.info("Вызван метод getAllStudentsByAge");
+        logger.debug("Вызван метод getAllStudentsByAge");
         return studentRepository.findStudentsByAge(age);
     }
 
     public List<Student> getAllStudentsByAgeBetween(Integer min, Integer max) {
-        logger.info("Вызван метод getAllStudentsByAgeBetween");
+        logger.debug("Вызван метод getAllStudentsByAgeBetween");
         return studentRepository.findStudentsByAgeBetween(min, max);
     }
 
     public Integer getCountAllStudent() {
-        logger.info("Вызван метод getCountAllStudent");
+        logger.debug("Вызван метод getCountAllStudent");
         return studentRepository.getCountAllStudent();
     }
 
     public Integer getAverageAgeStudents() {
-        logger.info("Вызван метод getAverageAgeStudents");
+        logger.debug("Вызван метод getAverageAgeStudents");
         return studentRepository.getAverageAgeStudents();
     }
 
     public List<Student> getLastAddedFiveStudent() {
-        logger.info("Вызван метод getLastAddedFiveStudent");
+        logger.debug("Вызван метод getLastAddedFiveStudent");
         return studentRepository.getLastAddedFiveStudents();
     }
 }

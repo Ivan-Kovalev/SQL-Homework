@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Profile("!production")
-public class infoControllerTest {
+public class InfoControllerTest {
 
     @GetMapping(path = "/port")
     public ResponseEntity<Integer> getServerPort() {
