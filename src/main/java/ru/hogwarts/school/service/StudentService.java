@@ -6,8 +6,11 @@ import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class StudentService {
@@ -69,13 +72,36 @@ public class StudentService {
         return studentRepository.getCountAllStudent();
     }
 
-    public Integer getAverageAgeStudents() {
+    public Double getAverageAgeStudents() {
         logger.debug("Вызван метод getAverageAgeStudents");
-        return studentRepository.getAverageAgeStudents();
+        return studentRepository.findAll().stream()
+                .parallel()
+                .mapToInt(Student::getAge)
+                .average()
+                .orElse(0.0);
     }
 
     public List<Student> getLastAddedFiveStudent() {
         logger.debug("Вызван метод getLastAddedFiveStudent");
         return studentRepository.getLastAddedFiveStudents();
+    }
+
+    public Collection<String> getStudentsWhoseNameStartsWith(String letter) {
+        logger.debug("Вызван метод getStudentsWhoseNameStartsWith");
+        return studentRepository.findAll().stream()
+                .parallel()
+                .map(Student::getName)
+                .map(String::toUpperCase)
+                .filter(name -> name.startsWith(letter))
+                .toList();
+    }
+
+    public Integer getIntegerValue() {
+        logger.debug("Вызван метод getIntegerValue");
+        return Stream
+                .iterate(1, a -> a +1)
+                .limit(1_000_000)
+                .parallel()
+                .reduce(0, Integer::sum);
     }
 }
