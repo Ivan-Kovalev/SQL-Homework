@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @Service
@@ -98,10 +99,9 @@ public class StudentService {
 
     public Integer getIntegerValue() {
         logger.debug("Вызван метод getIntegerValue");
-        return Stream
-                .iterate(1, a -> a +1)
-                .limit(1_000_000)
+        return (int) IntStream.range(1, 1_000_001)
                 .parallel()
-                .reduce(0, Integer::sum);
+                .summaryStatistics()
+                .getSum();
     }
 }
