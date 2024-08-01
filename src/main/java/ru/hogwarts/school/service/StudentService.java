@@ -99,9 +99,13 @@ public class StudentService {
 
     public Integer getIntegerValue() {
         logger.debug("Вызван метод getIntegerValue");
-        return (int) IntStream.range(1, 1_000_001)
+        System.out.println("Начало " + System.currentTimeMillis() + "сек");
+        int result = (int) IntStream.range(1, 1_000_001)
                 .parallel()
                 .summaryStatistics()
                 .getSum();
+        System.out.println("Конец " + System.currentTimeMillis() + "сек");
+        logger.info("Метод getIntegerValue закончил работу");
+        return result;
     }
 }
