@@ -51,6 +51,11 @@ public class FacultyController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @GetMapping(path = "/longest-name")
+    public String getFacultyWithLongestName() {
+        return service.getFacultyWithLongestName();
+    }
+
     @PostMapping
     public Faculty addFaculty(@RequestBody Faculty faculty) {
         return service.add(faculty);

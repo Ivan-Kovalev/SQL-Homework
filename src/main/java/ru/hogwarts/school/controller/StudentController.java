@@ -50,13 +50,33 @@ public class StudentController {
     }
 
     @GetMapping(path = "/average-age")
-    public Integer getAverageAgeStudents() {
+    public Double getAverageAgeStudents() {
         return service.getAverageAgeStudents();
     }
 
     @GetMapping(path = "/last-five")
     public Collection<Student> getLastAddedFiveStudent() {
         return service.getLastAddedFiveStudent();
+    }
+
+    @GetMapping(path = "/name-starts-with/{letter}")
+    public Collection<String> getStudentsWhoseNameStartsWith(@PathVariable String letter) {
+        return service.getStudentsWhoseNameStartsWith(letter);
+    }
+
+    @GetMapping(path = "/print-parallel")
+    public void getStudentsNamePrintParallel() {
+        service.getStudentsNamePrintParallel();
+    }
+
+    @GetMapping(path = "/print-synchronized")
+    public void getStudentsNamePrintSynchronized() {
+        service.getStudentsNamePrintSynchronized();
+    }
+
+    @GetMapping(path = "/integer-value")
+    public Integer getIntegerValue() {
+        return service.getIntegerValue();
     }
 
     @PostMapping
