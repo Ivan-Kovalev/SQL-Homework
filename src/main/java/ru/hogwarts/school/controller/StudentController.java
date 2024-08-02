@@ -64,6 +64,16 @@ public class StudentController {
         return service.getStudentsWhoseNameStartsWith(letter);
     }
 
+    @GetMapping(path = "/print-parallel")
+    public void getStudentsNamePrintParallel() {
+        service.getStudentsNamePrintParallel();
+    }
+
+    @GetMapping(path = "/print-synchronized")
+    public void getStudentsNamePrintSynchronized() {
+        service.getStudentsNamePrintSynchronized();
+    }
+
     @GetMapping(path = "/integer-value")
     public Integer getIntegerValue() {
         return service.getIntegerValue();

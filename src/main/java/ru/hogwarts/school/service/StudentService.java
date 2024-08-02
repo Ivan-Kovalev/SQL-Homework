@@ -9,9 +9,7 @@ import ru.hogwarts.school.repository.StudentRepository;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 @Service
 public class StudentService {
@@ -107,5 +105,60 @@ public class StudentService {
         System.out.println("Конец " + System.currentTimeMillis() + "сек");
         logger.info("Метод getIntegerValue закончил работу");
         return result;
+    }
+
+    public void getStudentsNamePrintParallel() {
+        logger.debug("Вызван метод getStudentsNamePrintParallel");
+        List<Student> students = studentRepository.findAll();
+
+        System.out.println(students.get(0).getName());
+        System.out.println(students.get(1).getName());
+
+        Runnable task1 = () -> {
+            System.out.println(students.get(2).getName());
+            System.out.println(students.get(3).getName());
+        };
+
+        Runnable task2 = () -> {
+            System.out.println(students.get(4).getName());
+            System.out.println(students.get(5).getName());
+        };
+
+        Thread thread1 = new Thread(task1);
+        Thread thread2 = new Thread(task2);
+        thread1.start();
+        thread2.start();
+
+        try {
+            thread1.join();
+            thread2.join();
+        } catch (InterruptedException e) {
+            logger.error("Ошибка при ожидании завершения потоков: {}", e.getMessage());
+        }
+    }
+
+    public void getStudentsNamePrintSynchronized() {
+        logger.debug("Вызван метод getStudentsNamePrintSynchronized");
+        List<Student> students = studentRepository.findAll();
+
+        synchronized (students) {
+            System.out.println(students.get(0).getName());
+            System.out.println(students.get(1).getName());
+        }
+
+        synchronized (students) {
+            new Thread (() -> {
+                System.out.println(students.get(2).getName());
+                System.out.println(students.get(3).getName());
+            }).start();
+        }
+
+        synchronized (students) {
+            new Thread (() -> {
+                System.out.println(students.get(4).getName());
+                System.out.println(students.get(5).getName());
+            }).start();
+        }
+        logger.info("Метод getStudentsNamePrintSynchronized завершил работу");
     }
 }
