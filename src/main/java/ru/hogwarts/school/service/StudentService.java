@@ -111,29 +111,24 @@ public class StudentService {
         logger.debug("Вызван метод getStudentsNamePrintParallel");
         List<Student> students = studentRepository.findAll();
 
-        System.out.println(students.get(0).getName());
-        System.out.println(students.get(1).getName());
+        if (students.size() >= 6) {
+            System.out.println(students.get(0).getName());
+            System.out.println(students.get(1).getName());
 
-        Runnable task1 = () -> {
-            System.out.println(students.get(2).getName());
-            System.out.println(students.get(3).getName());
-        };
+            Runnable task1 = () -> {
+                System.out.println(students.get(2).getName());
+                System.out.println(students.get(3).getName());
+            };
 
-        Runnable task2 = () -> {
-            System.out.println(students.get(4).getName());
-            System.out.println(students.get(5).getName());
-        };
+            Runnable task2 = () -> {
+                System.out.println(students.get(4).getName());
+                System.out.println(students.get(5).getName());
+            };
 
-        Thread thread1 = new Thread(task1);
-        Thread thread2 = new Thread(task2);
-        thread1.start();
-        thread2.start();
-
-        try {
-            thread1.join();
-            thread2.join();
-        } catch (InterruptedException e) {
-            logger.error("Ошибка при ожидании завершения потоков: {}", e.getMessage());
+            Thread thread1 = new Thread(task1);
+            Thread thread2 = new Thread(task2);
+            thread1.start();
+            thread2.start();
         }
     }
 
@@ -141,24 +136,26 @@ public class StudentService {
         logger.debug("Вызван метод getStudentsNamePrintSynchronized");
         List<Student> students = studentRepository.findAll();
 
-        synchronized (students) {
-            System.out.println(students.get(0).getName());
-            System.out.println(students.get(1).getName());
-        }
+        printName(students.get(0).getName());
+        printName(students.get(1).getName());
 
-        synchronized (students) {
-            new Thread (() -> {
-                System.out.println(students.get(2).getName());
-                System.out.println(students.get(3).getName());
-            }).start();
-        }
+        new Thread(() -> {
+            printName(students.get(2).getName());
+            printName(students.get(3).getName());
+        }).start();
 
-        synchronized (students) {
-            new Thread (() -> {
-                System.out.println(students.get(4).getName());
-                System.out.println(students.get(5).getName());
-            }).start();
-        }
+        new Thread(() -> {
+            printName(students.get(4).getName());
+            printName(students.get(5).getName());
+        }).start();
         logger.info("Метод getStudentsNamePrintSynchronized завершил работу");
+    }
+
+    final Object syncObject = new Object();
+
+    private void printName(String name) {
+        synchronized (syncObject) {
+            System.out.println(name);
+        }
     }
 }
